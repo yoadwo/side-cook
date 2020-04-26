@@ -42,7 +42,7 @@
             class="pa-2"
             outlined
             tile
-            :id="recipe.id"
+            :id="id"
             :img-src="recipe.image"
             :card-title="recipe.title"
             :used-ingredient-count="recipe.usedIngredientCount"
@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import RecipePreview from "../components/RecipePreview";
+import RecipePreview from "./RecipePreview";
 export default {
   name: "Recipes",
   components: {
