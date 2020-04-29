@@ -33,7 +33,8 @@
             ></v-autocomplete>
           </v-col>
           <v-col cols="3" class="mt-4">
-            <v-btn color="primary" @click="getRecipeList">Let's Cook!</v-btn>
+            <v-btn v-if="isOnline" color="primary" @click="getRecipeList">Let's Cook!</v-btn>
+            <v-btn v-else color="warning" @click="getRecipeList">HISTORY</v-btn>
           </v-col>
         </v-row>
         <v-row>
@@ -237,7 +238,8 @@ export default {
         usedIngredients: []
       }
     ],
-    recipeThumbnails: []
+    recipeThumbnails: [],
+    isOnline: null
   }),
   methods: {
     getRecipeList() {
@@ -264,10 +266,10 @@ export default {
             throw resp;
           });
       }
-    },
-    clearExtraInput(MouseEvent) {
-      debugger;
     }
+  },
+  created() {
+    this.isOnline = window.navigator.onLine;
   }
 };
 </script>
