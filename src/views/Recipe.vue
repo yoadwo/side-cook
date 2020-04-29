@@ -101,7 +101,7 @@ export default {
   mixins: [spoonacular],
   data: () => {
     return {
-      inDebug: true,
+      inDebug: false,
       recipeDebug: {
         vegetarian: true,
         vegan: false,
