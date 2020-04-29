@@ -10,8 +10,8 @@
       <div>Missed Ingredients: {{missedIngredientCount}}</div>
     </v-card-text>
 
-    <v-card-actions>
-      <v-btn color="orange" text @click="pushRoute">YES!</v-btn>
+    <v-card-actions class="justify-center">
+      <v-btn color="#df2827" text @click="pushRoute">THIS ONE LOOKS YUMMY!</v-btn>
     </v-card-actions>
   </v-card>
 </template>

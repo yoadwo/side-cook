@@ -18,13 +18,13 @@
                     {{recipe.readyInMinutes}} {{ recipe.readyInMinutes > 1 ? 'minutes' : 'minute' }}
                   </p>
                 </li>
-                <li v-if="recipe.preparationMinutes">
+                <li v-if="recipe.preparationMinutes && recipe.readyInMinutes - recipe.preparationMinutes > 0">
                   <p>
                     <strong>PREPARATION TIME</strong>
                     {{recipe.preparationMinutes}} {{ recipe.preparationMinutes > 1 ? 'minutes' : 'minute' }}
                   </p>
                 </li>
-                <li>
+                <li v-if="recipe.cookingMinutes">
                   <p>
                     <strong>COOKING TIME</strong>
                     {{recipe.cookingMinutes}} {{ recipe.cookingMinutes > 1 ? 'minutes' : 'minute' }}
@@ -44,7 +44,7 @@
               <p>
                 <strong>Dish Types</strong>
                 <v-chip
-                  class="success dark--text mx-1"
+                  class="success dark--text mx-1 text-capitalize"
                   v-for="(type, index) in recipe.dishTypes"
                   :key="index"
                 >{{type}}</v-chip>
@@ -415,13 +415,11 @@ export default {
           if (resp.status === 200) {
             this.recipe = resp.data;
           } else {
-              debugger;
             console.log("unhandled successful response with status <>200");
             throw resp;
           }
         })
         .catch(err => {
-            debugger;
           console.log("unhandled error response");
           throw resp;
         });

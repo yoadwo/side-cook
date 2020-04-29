@@ -10,26 +10,26 @@
         </p>
       </v-col>
 
-      <v-col class="mb-1">
+      <v-col>
         <v-img :src="require('../assets/images/side-cook-logo.png')" contain height="200" />
       </v-col>
       <v-col class="mb-1" cols="12">
-        <!-- <h2 class="headline font-weight-bold mb-3">Pick Ingredients</h2> -->
-
         <v-row justify="center">
           <v-col cols="9">
             <v-autocomplete
               v-model="selectedIngredients"
               :items="ingredients"
-              item-text="nameEn"
+              item-text="name"
               item-value="id"
               label="Ingredients"
               return-object
-              single-line
               multiple
               chips
               clearable
               deletable-chips
+              :search-input.sync="searchInput"
+              @change="searchInput=''"
+              ref="ingredientsInput"
             ></v-autocomplete>
           </v-col>
           <v-col cols="3" class="mt-4">
@@ -60,13 +60,15 @@
 <script>
 import RecipePreview from "../components/RecipePreview";
 import ingredientsList from "../assets/data/ingredients";
+import spoonacular from "../mixins/api/spoonacular";
 export default {
   name: "Recipes",
   components: {
     RecipePreview
   },
+  mixins: [spoonacular],
   data: () => ({
-    inDebug: true,
+    inDebug: false,
     selectedIngredients: [],
     ingredients: ingredientsList,
     ingredientsMenuProps: {
@@ -75,6 +77,7 @@ export default {
       disableKeys: false,
       openOnClick: true
     },
+    searchInput: "",
     recipeThumbnailsDebug: [
       {
         id: 73420,
@@ -238,13 +241,32 @@ export default {
   }),
   methods: {
     getRecipeList() {
-      let ingredientsQuery = this.selectedIngredients.map(s => s.id);
-      console.log(ingredientsQuery);
-      debugger;
+      // use name as 'key' because the api queries by name rather than id
+      let ingredientsKeys = this.selectedIngredients.map(s => s.name);
       if (this.inDebug) {
         this.recipeThumbnails = this.recipeThumbnailsDebug;
       } else {
+        this.searchRecipes(ingredientsKeys, 8)
+          .then(resp => {
+            if (resp.status === 200) {
+              this.recipe = resp.data;
+              let sortByUsedIncreasing = function(recpA, recpB) {
+                return recpB.usedIngredientCount - recpA.usedIngredientCount;
+              };
+              this.recipeThumbnails = resp.data.sort(sortByUsedIncreasing);
+            } else {
+              console.log("unhandled successful response with status <>200");
+              throw resp;
+            }
+          })
+          .catch(err => {
+            console.log("unhandled error response");
+            throw resp;
+          });
       }
+    },
+    clearExtraInput(MouseEvent) {
+      debugger;
     }
   }
 };

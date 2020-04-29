@@ -22,7 +22,6 @@ export default {
   },
   watch: {
       '$route' () {
-          debugger;
           // todo: finish this
           let newRoute = { text: this.$route.params.name || "", disabled: true };
           if (this.breads.length == 1) {
